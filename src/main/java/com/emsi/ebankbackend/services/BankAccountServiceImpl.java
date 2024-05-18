@@ -158,15 +158,15 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public List<AccountOperationDTO> accountHistory(String accountId){
-        List<AccountOperation> accountOperations = accountOperationRepository.findByAccountId(accountId);
-        return accountOperations.stream().map(op-> dtoMapper.fromAccountOperation(op)).collect(Collectors.toList());
+        List<AccountOperation> accountOperations = accountOperationRepository.findByBankAccountId(accountId);
+        return accountOperations.stream().map(op->dtoMapper.fromAccountOperation(op)).collect(Collectors.toList());
     }
 
     @Override
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElse(null);
         if (bankAccount == null) throw new BankAccountNotFoundException("Account not found");
-        Page<AccountOperation> accountOperations = accountOperationRepository.findByAccountId(accountId, PageRequest.of(page, size));
+        Page<AccountOperation> accountOperations = accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page, size));
         AccountHistoryDTO accountHistoryDTO = new AccountHistoryDTO();
         List<AccountOperationDTO> accountOperationDTOS = accountOperations.getContent().stream().map(op -> dtoMapper.fromAccountOperation(op)).collect(Collectors.toList());
         accountHistoryDTO.setAccountOperationDTO(accountOperationDTOS);

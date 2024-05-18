@@ -19,5 +19,5 @@ public class AccountOperation {
     private double amount;
     @ManyToOne
     private BankAccount bankAccount;
-    String description;
+    private String description;
 }
